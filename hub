@@ -1,0 +1,20 @@
+FROM tomcat:9.0.124-jre8-temurin
+
+COPY target/online-food-delivery.war /usr/local/tomcat/webapps/ROOT.war
+
+EXPOSE 8080
+
+CMD ["catalina.sh", "run"]
+
+
+
+
+  
+  kubernetes steps to manage given application:
+1. Write the dockerfile in the project directory and start minikube as well
+2. Refer above msg for dockerfile template
+3. build the image using docker build -t imagename .
+4. load the image using, minikube image load imagename
+5. create deployment, expose as service with port and target-port set to tomcat server 
+6. run the patch command kubectl patch deployment myfoodapp1 -p "{\"spec\":{\"template\":{\"spec\":{\"containers\":[{\"name\":\"foodapp\",\"imagePullPolicy\":\"Never\"}]}}}}"
+7. create a tunnel to establish communication between localhost & tomcat kubectl port-forward svc/myfoodapp 6060:8080 where 8080 is the tomcat server & 6060 is the target port where you can see the application running
